@@ -1,0 +1,25 @@
+<div class="login-form">
+	<div class="top-login">
+		<span><img src="images/logo.png" alt=""/></span>
+	</div>
+	<h1>Login</h1>
+	<div class="login-top">
+	<!-- <div ng-show="error" class="alert alert-danger">{{error}}</div> -->
+		<form name="form" ng-submit="login()" role="form">
+			<div class="login-ic">
+				<i ></i>
+				<input type="text" ng-model='formData.username' value="User name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User name';}"/>
+				<div class="clear"> </div>					
+			</div>
+			<div class="login-ic">
+				<i class="icon"></i>
+				<input type="password" ng-model='formData.password' value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'password';}"/>
+				<div class="clear"> </div>
+			</div>
+		
+			<div class="log-bwn">
+				<input type="submit"  value="Login" >
+			</div>
+		</form>
+	</div>			
+</div>
