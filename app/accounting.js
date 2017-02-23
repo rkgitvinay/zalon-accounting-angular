@@ -17,17 +17,18 @@ $routeProvider
         })
 
         
-        .when('/customers', {
-                templateUrl : 'templates/accounting/customer.html',
-                controller  : 'contactCtrl'
+        .when('/other', {
+                templateUrl : 'templates/accounting/other.html',
+                controller  : 'OtherCtrl'
         });
 });
 var access_token = location.search.split('access_token=')[1];
-
+var base_url = 'zalonstyle.in:8080';
+var local_url = 'localhost:3000';
 phpro.controller('HomeCtrl', function($scope,$http,$window){  
     var selected_id;
 
-    var url = 'http://localhost:3000/accounting/getPaymentMethods?access_token='+access_token;
+    var url = 'http://'+base_url+'/accounting/getPaymentMethods?access_token='+access_token;
     $http({
         method  : 'GET',
         url     : url           
@@ -47,7 +48,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
         
     $scope.accFormInfo = {};   
     $scope.saveData = function (){        
-        var url = 'http://localhost:3000/accounting/setPaymentMethod';   
+        var url = 'http://'+base_url+'/accounting/setPaymentMethod';   
         $scope.accFormInfo['access_token']  = access_token;
         var data =  JSON.stringify($scope.accFormInfo);
         $http({
@@ -69,7 +70,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
         $scope.acc_name = select.name;
         $http({
             method  : 'GET',
-            url     : 'http://localhost:3000/accounting/getStatsByCategory',
+            url     : 'http://'+base_url+'/accounting/getStatsByCategory',
             params  :{access_token:access_token,payment_type_id:select.id}          
         }).then(function(response){ 
             $scope.payment_log  = response.data.result;            
@@ -80,7 +81,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
     $scope.getSubCategory = function(cat){        
         if(cat== 'Vendor' || cat == 'Staff'){
             $scope.subCat = true;
-            var url = 'http://localhost:3000/accounting/getSubCategory';
+            var url = 'http://'+base_url+'/accounting/getSubCategory';
             $http({
                 method  : 'GET',
                 url     : url ,
@@ -115,7 +116,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
         $scope.payForm['subCat_id']  = $scope.subCat_id;        
         $scope.payForm['access_token']  = access_token;
         $scope.payForm['payment_type_id'] = payment_type_id;
-        var url = 'http://localhost:3000/accounting/addTransaction';   
+        var url = 'http://'+base_url+'/accounting/addTransaction';   
         var data =  JSON.stringify($scope.payForm);
         $http({
             method  : 'POST',
@@ -149,7 +150,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
 
 phpro.controller('InfoCtrl', function($scope,$http,$window) {
     $scope.transaction_type = 'Billing'
-    var url = 'http://localhost:3000/accounting/getInfoStats?access_token='+access_token;
+    var url = 'http://'+base_url+'/accounting/getInfoStats?access_token='+access_token;
     $http({
         method  : 'GET',
         url     : url,
@@ -178,7 +179,7 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
     $scope.getCategoryStats = function(cat){
         $scope.transaction_type = cat.category;
         $scope.sublist = 'zalon';
-        var url = 'http://localhost:3000/accounting/getTransactionList';
+        var url = 'http://'+base_url+'/accounting/getTransactionList';
         $http({
             method  : 'GET',
             url     : url ,
@@ -193,6 +194,87 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
     }  
 });
 
-phpro.controller('contactCtrl', function($scope) {
-      
+phpro.controller('OtherCtrl', function($scope,$http) {   
+
+    var data = [];
+    var url = 'http://'+local_url+'/accounting/getPurchaseOrder?access_token='+access_token;
+    $http({
+        method  : 'GET',
+        url     : url,
+    }).then(function(response){
+        if(response.data.supplier.length > 0){
+            $scope.supplier = response.data.supplier[0].name;
+            $scope.supplier_id = response.data.supplier[0].id;
+            $scope.list = response.data;
+        }
+    }); 
+
+    $scope.getSupplierOrder = function(supplier){
+        $scope.supplier_id = supplier.id
+        data = [];
+        $scope.supplier = supplier.name;
+        var url = 'http://'+local_url+'/accounting/getSupplierOrder';
+        $http({
+            method  : 'GET',
+            url     : url,
+            params  : {access_token:access_token,supplier_id:supplier.id}   
+        }).then(function(response){            
+           $scope.list.order = response.data.order;
+        });
+    }
+    $scope.addMoreBtn =  function(){
+        $scope.list.order.unshift({});
+    }    
+
+    $scope.sub_total = 0;
+    $scope.total = 0;
+
+    $scope.setData = function(item){
+        $scope.sub_total = $scope.sub_total + item.data.total; 
+        $scope.total = $scope.sub_total;                           
+        data.push({order_id:item.order_id,index:item.index,item:item.data});          
+    }
+
+    
+    $scope.deleteData = function(item){
+        $scope.sub_total = $scope.sub_total - item.data.total; 
+        $scope.total = $scope.sub_total; 
+        for(var i=0; i<data.length; i++){
+            if(data[i].index == item.index){
+                data.splice(i, 1);  //removes 1 element at position i 
+                break;
+            }
+        }        
+    }
+    $scope.grand_total = function(){
+        return $scope.sub_total + $scope.vat + $scope.cartrage + $scope.other;
+    }    
+
+    $scope.setOrderData = function(order){
+        var info = [];        
+        info.push(data);       
+        var url = 'http://'+local_url+'/accounting/setOrderData';
+        $http({
+            method  : 'GET',
+            url     : url,
+            params  : {access_token:access_token,order:order,data:info,supplier_id:$scope.supplier_id}   
+        }).then(function(response){            
+            if(response.data.status == 'success'){
+                $scope.list.order = [];
+            }
+        });
+    }
+
+    $scope.deleteOrder = function(list,index,order_id){        
+        var url = 'http://'+local_url+'/accounting/deleteOrder';
+        $http({
+            method  : 'GET',
+            url     : url,
+            params  : {access_token:access_token,order_id:order_id}   
+        }).then(function(response){ 
+            if(response.data.status == 'success'){
+                list.splice(index, 1);    
+            }
+        });
+    }
 });

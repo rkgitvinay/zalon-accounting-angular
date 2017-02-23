@@ -100,7 +100,7 @@ th{
 	padding-left: 10px;
 }
 .card-value{
-	position: absolute;
+	/*position: absolute;*/
 	right: 12px;
 }
 
@@ -284,4 +284,8 @@ body {
 .active_list{
   border-left: 3px solid #d19b3d;
   background-color: #4f5b69;
+}
+.custom_dropdown{
+  margin-left: -30px;
+  margin-right: -30px;
 }

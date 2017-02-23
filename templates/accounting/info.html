@@ -119,9 +119,15 @@
 
             </div>
             <div ng-if="transaction_type != 'Billing'" class="col-sm-9 bottom-menu">
-                <div class="col-sm-4 debit" style="border-right: solid;border-color: gray">Pay : {{stats.pay}}</div>
-                <div class="col-sm-4 credit" style="border-right: solid;border-color: gray">Receive : {{stats.receive}}</div>
-                <div class="col-sm-4">Balance : {{stats.balance}}</div>
+                <div class="col-sm-4 debit" style="border-right: solid;border-color: gray">
+                  Pay : <span class="count">{{stats.pay}}</span>
+                </div>
+                <div class="col-sm-4 credit count" style="border-right: solid;border-color: gray">
+                  Receive : <span class="count">{{stats.receive}}</span>
+                </div>
+                <div class="col-sm-4 count">
+                  Balance : <span class="count">{{stats.balance}}</span>
+                </div>
             </div>
         </div>
   </div>
@@ -292,6 +298,7 @@
 
 
 <script type="text/javascript">
+
     $(document).on('click','.addTransaction', function(){
         $('#payForm')[0].reset();
     });

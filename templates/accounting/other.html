@@ -1,0 +1,152 @@
+<style type="text/css">
+  .input-group-addon{
+    padding: 3px 5px !important;
+    border: none;
+  }
+  .btn.active {                
+  display: none;    
+}
+
+.btn span:nth-of-type(1)  {             
+  display: none;
+}
+.btn span:last-child  {             
+  display: block;   
+}
+
+.btn.active  span:nth-of-type(1)  {             
+  display: block;   
+}
+.btn.active span:last-child  {              
+  display: none;      
+}
+.custom-row{
+  max-width: 0px;
+}
+.btn-delete{
+  padding-right: 10px;
+  cursor: pointer;
+}
+</style>
+
+<nav class="navbar navbar-default" style="margin-bottom: 8px;">
+  <div class="container-fluid"> 
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">        
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{supplier}}<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="sup in list.supplier">
+              <a ng-click="getSupplierOrder({id:sup.id,name:sup.name})" href="javascript:void(0)">{{sup.name}}</a>
+            </li>            
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" ng-model="invoice" class="form-control" placeholder="Invoice Number">
+        </div>
+        <div class="form-group">
+          <input type="text" ng-model="description" class="form-control" placeholder="Description">
+        </div>
+        <!-- <button type="submit" class="btn btn-default">Submit</button> -->
+      </form>  
+      <div class="navbar-form navbar-right">        
+        <span ng-click="addMoreBtn()" class="btn btn-default add-more-btn">
+                <i class="fa fa-plus"></i>  
+             Add
+        </span>
+      </div>     
+    </div>
+  </div>
+</nav>
+
+
+
+<div id="content" style="height: 383px;">
+<div class="form-group" style="height: 320px; overflow-y: auto;">
+
+	<div class="input-group" ng-repeat="item in list.order">
+      <span class="input-group-addon">
+         <div class="dropdown custom_dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Product
+         <!--  <span class="caret"></span> --></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+          </ul>
+        </div>
+      </span>
+
+      <span class="input-group-addon" ng-init="formData.quantity= item.quantity">
+	  		<input type="text" ng-model="formData.quantity" ng-change="formData.total = formData.quantity * formData.purchase_price" class="form-control" placeholder="Quantity">
+      </span>    
+
+      <span class="input-group-addon custom-row">
+        <input type="text" ng-model="formData.mrp" class="form-control" placeholder="MRP">
+      </span>
+
+     	<span class="input-group-addon">
+	  		<input type="text" ng-model="formData.purchase_price" ng-change="formData.total = formData.quantity * formData.purchase_price" class="form-control" placeholder="Purchase Price">
+      </span>
+
+      <span class="input-group-addon custom-row" ng-init="formData.total = formData.quantity * formData.purchase_price">
+        <input type="text" ng-model="formData.total"  class="form-control" placeholder="Total">
+      </span>        
+
+      <span class="input-group-addon custom-row">	  		
+          <div data-toggle="buttons">
+            <span class="btn-delete" ng-click="deleteOrder(list.order,$index,item.id)">
+              <i class="fa fa-trash"></i> 
+            </span>
+              <label class="btn btn-success" ng-click="setData({order_id:item.id,data:formData,index:$index})">
+                  <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                   Add
+              </label>
+              <label class="btn btn-danger active" ng-click="deleteData({data:formData,index:$index})">
+                  <input type="radio" name="options" id="option2" autocomplete="off">
+                 Remove
+              </label>          
+          </div>          
+      </span>
+	</div>
+
+</div>
+</div>
+
+
+<div class="bottom-menu">
+  <div class="input-group">  
+
+      <span class="input-group-addon">
+        <input type="text" value="" ng-model="sub_total" class="form-control"  placeholder="Sub Total">
+      </span>
+
+       <span class="input-group-addon">
+        <input type="text" value="" ng-model="vat" class="form-control" placeholder="Total Vat">
+      </span>
+
+       <span class="input-group-addon">
+        <input type="text" value="" ng-model="cartrage"  class="form-control" placeholder="Cartrage">
+      </span>
+
+      <span class="input-group-addon">
+        <input type="text" value="" ng-model="other" class="form-control" placeholder="Other Charges">
+      </span>
+
+      <span class="input-group-addon">
+        <input type="text" ng-model="total" class="form-control" placeholder="Total">
+      </span>     
+
+      <span class="input-group-addon" style="padding-left: 0px;padding-right: 0px;padding-top: 6px;">
+        <button class="add btn btn-success" type="button" ng-click="setOrderData({invoice:invoice,description:description,sub_total:sub_total,vat:vat,cartrage:cartrage,other:other,total:total})">Close</button>
+        <button class="add btn btn-danger" type="button">Cancel</button>
+      </span>
+
+  </div>
+</div>
+
+<!-- <span> <i class="fa fa-dashboard fa-lg"></span> -->
+
+	
