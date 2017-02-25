@@ -159,15 +159,19 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
             url     : 'http://'+base_url+'/accounting/deletAccount',
             params  :{access_token:access_token,payment_type_id:acc.id}          
         }).then(function(response){ 
-            if(response.data.result.length > 0){
-                $scope.accounts = response.data.result; 
-                $scope.selected = response.data.result[0].id;
-                selected_id     = response.data.result[0].id;
-                $scope.acc_name = response.data.result[0].account_name;
-                $scope.category = response.data.category; 
-                $scope.category.unshift({id:0,category_name:'Select Category'});                         
-                $scope.cat_id   = $scope.category[0].category_name;
-                $scope.payment_log = response.data.payment_log;
+            if(response.data.status == 'success'){            
+                if(response.data.result.length > 0){
+                    $scope.accounts = response.data.result; 
+                    $scope.selected = response.data.result[0].id;
+                    selected_id     = response.data.result[0].id;
+                    $scope.acc_name = response.data.result[0].account_name;
+                    $scope.category = response.data.category; 
+                    $scope.category.unshift({id:0,category_name:'Select Category'});                         
+                    $scope.cat_id   = $scope.category[0].category_name;
+                    $scope.payment_log = response.data.payment_log;
+                }
+            }else{
+               window.alert(response.data.message); 
             }         
         }); 
     }
