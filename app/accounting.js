@@ -73,10 +73,20 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
             url     : 'http://'+base_url+'/accounting/getStatsByCategory',
             params  :{access_token:access_token,payment_type_id:select.id}          
         }).then(function(response){ 
-            $scope.payment_log  = response.data.result;            
-            //console.log(response.data.result);
+            $scope.payment_log  = response.data.result;                       
         });   
-    } 
+    }
+
+    $scope.getAccountStatsByDate = function(date){        
+        $http({
+            method  : 'GET',
+            url     : 'http://'+base_url+'/accounting/getAccountStatsByDate',
+            params  :{access_token:access_token,payment_type_id:$scope.selected,date:date}          
+        }).then(function(response){ 
+            $scope.payment_log  = response.data.result;                        
+        }); 
+    }
+
 
     $scope.getSubCategory = function(cat){        
         if(cat== 'Vendor' || cat == 'Staff'){
@@ -124,31 +134,51 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
             data    : {payload:data}
         }).then(function(response){
             if(response.data.status == 'success' && payment_type_id == $scope.selected){
-
-                // if($scope.selected == $scope.payment_id_from){
-                //     $scope.payment_log.unshift(response.data.result[0]);                    
-                // }else if($scope.selected == $scope.payment_id_to){
-                //     $scope.payment_log.unshift(response.data.result[1]);
-                // }
-
                 $scope.payment_log.unshift(response.data.result[0]);
-
                 $scope.accounts = response.data.account;  
                 $scope.payForm = {}; 
-            } 
-            //console.log(response);
+            }             
         }); 
     }
     $scope.dateForm = {};
-    $scope.getTest = function(){
-        
-        console.log('test');
+
+    $scope.checkEdit = 0;
+    $scope.deleteActionBtn = function(){
+        if($scope.checkEdit == 0){
+            $scope.deleteAcc = true;
+            $scope.checkEdit = 1;
+        }else{
+            $scope.deleteAcc = false;
+            $scope.checkEdit = 0;
+        }
+    }
+
+    $scope.deletAccount = function(acc){
+        $http({
+            method  : 'GET',
+            url     : 'http://'+base_url+'/accounting/deletAccount',
+            params  :{access_token:access_token,payment_type_id:acc.id}          
+        }).then(function(response){ 
+            if(response.data.result.length > 0){
+                $scope.accounts = response.data.result; 
+                $scope.selected = response.data.result[0].id;
+                selected_id     = response.data.result[0].id;
+                $scope.acc_name = response.data.result[0].account_name;
+                $scope.category = response.data.category; 
+                $scope.category.unshift({id:0,category_name:'Select Category'});                         
+                $scope.cat_id   = $scope.category[0].category_name;
+                $scope.payment_log = response.data.payment_log;
+            }         
+        }); 
     }
 
 
 });
 
 phpro.controller('InfoCtrl', function($scope,$http,$window) {
+    var seclectCategory ;
+    var selectId;
+
     $scope.transaction_type = 'Billing'
     var url = 'http://'+base_url+'/accounting/getInfoStats?access_token='+access_token;
     $http({
@@ -157,6 +187,9 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
 
     }).then(function(response){
         if(response.data.category.length > 0){
+            seclectCategory = response.data.category[0].category_name;
+            selectId = response.data.category[0].id;
+
             $scope.category = response.data.category; 
             $scope.vendors   = response.data.vendors;
             $scope.staffs    = response.data.staff;           
@@ -177,6 +210,8 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
     }
 
     $scope.getCategoryStats = function(cat){
+        seclectCategory = cat.category;
+        selectId = cat.id;
         $scope.transaction_type = cat.category;
         $scope.sublist = 'zalon';
         var url = 'http://'+base_url+'/accounting/getTransactionList';
@@ -191,13 +226,28 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
             }
             // console.log(response);
         });
-    }  
+    } 
+
+    $scope.getCategoryStatsByDate = function(date){
+        var url = 'http://'+base_url+'/accounting/getTransactionListByDate';
+        $http({
+            method  : 'GET',
+            url     : url ,
+            params  :{access_token:access_token,id:selectId,category:seclectCategory,date:date}          
+        }).then(function(response){               
+            if(response.data.result.length > 0){                    
+               $scope.payment_log = response.data.result; 
+               $scope.stats = getSum(response.data.result);
+            }
+             //console.log(response);
+        });
+    } 
 });
 
 phpro.controller('OtherCtrl', function($scope,$http) {   
 
     var data = [];
-    var url = 'http://'+local_url+'/accounting/getPurchaseOrder?access_token='+access_token;
+    var url = 'http://'+base_url+'/accounting/getPurchaseOrder?access_token='+access_token;
     $http({
         method  : 'GET',
         url     : url,
@@ -213,7 +263,7 @@ phpro.controller('OtherCtrl', function($scope,$http) {
         $scope.supplier_id = supplier.id
         data = [];
         $scope.supplier = supplier.name;
-        var url = 'http://'+local_url+'/accounting/getSupplierOrder';
+        var url = 'http://'+base_url+'/accounting/getSupplierOrder';
         $http({
             method  : 'GET',
             url     : url,
@@ -222,29 +272,47 @@ phpro.controller('OtherCtrl', function($scope,$http) {
            $scope.list.order = response.data.order;
         });
     }
-    $scope.addMoreBtn =  function(){
-        $scope.list.order.unshift({});
-    }    
+   
+    $scope.addMoreBtn =  function(){        
+        var url = 'http://'+base_url+'/accounting/getInventoryList';
+        $http({
+            method  : 'GET',
+            url     : url,
+            params  : {access_token:access_token}   
+        }).then(function(response){   
+            if(response.data.status == 'success'){  
 
-    $scope.sub_total = 0;
-    $scope.total = 0;
 
-    $scope.setData = function(item){
+                $scope.list.order.unshift({});
+
+                $scope.inventory = response.data.list;                             
+            }
+        });        
+    }  
+
+
+    $scope.sub_total = 0;  
+
+    $scope.setData = function(item){       
         $scope.sub_total = $scope.sub_total + item.data.total; 
-        $scope.total = $scope.sub_total;                           
-        data.push({order_id:item.order_id,index:item.index,item:item.data});          
+        data.push({order_id:item.order_id,index:item.index,item:item.data}); 
+        console.log(data);
     }
 
     
     $scope.deleteData = function(item){
+        console.log(item);
+
         $scope.sub_total = $scope.sub_total - item.data.total; 
-        $scope.total = $scope.sub_total; 
+        
+        console.log($scope.sub_total);
         for(var i=0; i<data.length; i++){
             if(data[i].index == item.index){
                 data.splice(i, 1);  //removes 1 element at position i 
                 break;
             }
-        }        
+        } 
+        console.log(data);
     }
     $scope.grand_total = function(){
         return $scope.sub_total + $scope.vat + $scope.cartrage + $scope.other;
@@ -253,7 +321,7 @@ phpro.controller('OtherCtrl', function($scope,$http) {
     $scope.setOrderData = function(order){
         var info = [];        
         info.push(data);       
-        var url = 'http://'+local_url+'/accounting/setOrderData';
+        var url = 'http://'+base_url+'/accounting/setOrderData';
         $http({
             method  : 'GET',
             url     : url,
@@ -261,12 +329,19 @@ phpro.controller('OtherCtrl', function($scope,$http) {
         }).then(function(response){            
             if(response.data.status == 'success'){
                 $scope.list.order = [];
+                data = [];
+                $scope.sub_total = null;
+                $scope.invoice = null,
+                $scope.description = null,
+                $scope.vat = null;
+                $scope.cartrage = null;
+                $scope.other = null;
             }
         });
     }
 
     $scope.deleteOrder = function(list,index,order_id){        
-        var url = 'http://'+local_url+'/accounting/deleteOrder';
+        var url = 'http://'+base_url+'/accounting/deleteOrder';
         $http({
             method  : 'GET',
             url     : url,
@@ -276,5 +351,11 @@ phpro.controller('OtherCtrl', function($scope,$http) {
                 list.splice(index, 1);    
             }
         });
+    }
+
+    $scope.total =  function(){
+        var total = parseInt($scope.sub_total || 0) + parseInt($scope.vat || 0) +
+                    parseInt($scope.cartrage || 0) + parseInt($scope.other || 0);
+        return total || 0;
     }
 });

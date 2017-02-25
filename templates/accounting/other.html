@@ -27,6 +27,15 @@
   padding-right: 10px;
   cursor: pointer;
 }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
 </style>
 
 <nav class="navbar navbar-default" style="margin-bottom: 8px;">
@@ -50,13 +59,17 @@
           <input type="text" ng-model="description" class="form-control" placeholder="Description">
         </div>
         <!-- <button type="submit" class="btn btn-default">Submit</button> -->
-      </form>  
-      <div class="navbar-form navbar-right">        
+      </form> 
+
+
+      <!-- <div class="navbar-form navbar-right">        
         <span ng-click="addMoreBtn()" class="btn btn-default add-more-btn">
                 <i class="fa fa-plus"></i>  
              Add
         </span>
-      </div>     
+      </div>  -->
+
+
     </div>
   </div>
 </nav>
@@ -67,16 +80,15 @@
 <div class="form-group" style="height: 320px; overflow-y: auto;">
 
 	<div class="input-group" ng-repeat="item in list.order">
+
       <span class="input-group-addon">
-         <div class="dropdown custom_dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Product
-         <!--  <span class="caret"></span> --></button>
-          <ul class="dropdown-menu">
-            <li><a href="#">HTML</a></li>
-            <li><a href="#">CSS</a></li>
-            <li><a href="#">JavaScript</a></li>
-          </ul>
-        </div>
+
+      <!-- <select ng-model="formData.inventory"  class="form-control" ng-options="v.inventory for v in inventory"> 
+
+      </select>    -->   
+        <span>{{item.inventory}}</span>
+
+
       </span>
 
       <span class="input-group-addon" ng-init="formData.quantity= item.quantity">
@@ -120,23 +132,23 @@
   <div class="input-group">  
 
       <span class="input-group-addon">
-        <input type="text" value="" ng-model="sub_total" class="form-control"  placeholder="Sub Total">
+        <input type="number" value="" ng-model="sub_total" class="form-control"  placeholder="Sub Total">
       </span>
 
        <span class="input-group-addon">
-        <input type="text" value="" ng-model="vat" class="form-control" placeholder="Total Vat">
+        <input type="number" value="" ng-model="vat" class="form-control" placeholder="Total Vat">
       </span>
 
        <span class="input-group-addon">
-        <input type="text" value="" ng-model="cartrage"  class="form-control" placeholder="Cartrage">
+        <input type="number" value="" ng-model="cartrage"  class="form-control" placeholder="Cartrage">
+      </span>
+
+      <span class="input-group-addon" ng-init="0">
+        <input type="number" value="" ng-model="other" class="form-control" placeholder="Other Charges">
       </span>
 
       <span class="input-group-addon">
-        <input type="text" value="" ng-model="other" class="form-control" placeholder="Other Charges">
-      </span>
-
-      <span class="input-group-addon">
-        <input type="text" ng-model="total" class="form-control" placeholder="Total">
+        <input type="text" class="form-control" ng-value="total()"  placeholder="Total">
       </span>     
 
       <span class="input-group-addon" style="padding-left: 0px;padding-right: 0px;padding-top: 6px;">

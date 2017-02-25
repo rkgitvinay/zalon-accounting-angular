@@ -26,6 +26,12 @@
     width:100%;
     table-layout:fixed;
 } 
+
+#btnDelete{
+  color: #bf2911;
+  margin-left: 25px;
+  cursor: pointer;   
+}
     
 </style>
 <div class="container" style="width: 100% !important;">
@@ -33,20 +39,25 @@
         <div class="col-sm-3 nopadding" style="background-color: #fafbfb;height: 445px;">
            <div class="menu-head" style="background-color: #ffffff;border-right: 1px solid antiquewhite">
                 <span data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus icon" aria-hidden="true"></i></span>
-                <span class="pull-right"><i class="fa fa-pencil-square-o icon" aria-hidden="true"></i></span>
+                <span class="pull-right" ng-model="checkEdit" ng-click="deleteActionBtn()"><i class="fa fa-pencil-square-o icon" aria-hidden="true"></i></span>
             </div>
 
             <div class="cards">          
             <!-- active_card                  -->
                 <div ng-repeat="account in accounts"> 
                     <div class="cad-group" ng-class='{active_card: account.id==selected}'>
-                        <!-- <span><i class="fa fa-address-card-o" aria-hidden="true"></i></span> -->
-                        <a href="javascript:void(0)" ng-click="getAccountStats({id:account.id,name:account.account_name})" class="button btn btn-primary btn-lg btn-block">
-                            <span class="pull-left card-icon"><i class="fa fa-address-card-o icon" aria-hidden="true"></i></span>
-                            <span class="card-name">{{account.account_name}}</span>
-                            <span class="card-value">{{account.balance}}</span>
-                        </a>
+                        <span>
+                          <a href="javascript:void(0)" ng-click="getAccountStats({id:account.id,name:account.account_name})" class="button btn btn-primary btn-lg btn-block">
+                              <span class="pull-left card-icon"><i class="fa fa-address-card-o icon" aria-hidden="true"></i></span>
+                              <span class="card-name">{{account.account_name}}</span>
+                              <span class="card-value">{{account.balance}}</span>                            
+                          </a>
+                        </span>
+                        <span ng-if="deleteAcc" id="btnDelete" ng-click="deletAccount({id:account.id,name:account.account_name})">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </span>
                     </div>
+                    
                 </div>                            
            </div>
 
@@ -62,32 +73,11 @@
                     <i class="fa fa-calendar dropbtn icon" aria-hidden="true"></i>
                     <div class="dropdown-content">
                         <a href="#">All Dates</a>                        
-                        <a tabindex="0"                           
-                           role="button" 
-                           data-html="true" 
-                           data-toggle="popover"                           
-                           title="<a href='' ng-click='getTest()'>done</a>" 
-                           data-content="<div>
-                                <div class='form-group'>
-                                    <div class='input-group date' data-provide='datepicker'>
-                                        <input ng-model='dateForm.start' name='start_date' placeholder='start date' type='text' class='form-control' />
-                                        <span class='input-group-addon'>                                            
-                                            <i class='fa fa-calendar dropbtn' aria-hidden='true'></i>
-                                        </span>
-                                    </div>
-                                        <br>
-                                     <div class='input-group date' data-provide='datepicker'>
-                                        <input ng-model='dateForm.end' name='end_date' placeholder='end date' type='text' class='form-control' />
-                                        <span class='input-group-addon'>
-                                            <i class='fa fa-calendar dropbtn' aria-hidden='true'></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>">Custom</a>
+                        <a href="javascript:void(0)" onclick="assignmentInfo()">Custom</a>
                     </div>
                 </span>
-
-                <b><span style="margin-left: 40%;">{{selected}}/{{acc_name}}</span></b>
+                <!-- {{selected}}/{{acc_name}} -->
+                <b><span style="margin-left: 40%;">{{acc_name}}</span></b>
                 <span data-toggle="modal" data-target="#addExpenseModal" class="pull-right"><i class="fa fa-plus icon" aria-hidden="true"></i></span>
             </div>
 
@@ -294,10 +284,39 @@
   </div>
 </div>
 
+<div class="modal fade bd-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal">Close</a>
+        <span style="margin-left: 35%;font-size: 15px;"><b>Add Account</b></span>
+        <a href="javascript:void(0);" data-dismiss="modal" ng-click="getAccountStatsByDate({from:fromDate,to:toDate})" class="pull-right">Save</a>
+      </div>
+        <div class="modal-body">
+            <div class="form-group">            
+                <input autocomplete="off" ng-model="fromDate" placeholder="From Date" id="fromDatepicker" class="form-control" type="text">
+            </div>
+             <div class="form-group">            
+                <input autocomplete="off" ng-model="toDate" placeholder="To Date" id="toDatepicker" class="form-control" type="text">
+            </div>
+        </div>     
+    </div>
+  </div>
+</div>
+
+
 
 
 
 <script type="text/javascript">
+
+    $( "#fromDatepicker" ).datepicker({ dateFormat: 'dd-mm-yy'});
+    $( "#toDatepicker" ).datepicker({ dateFormat: 'dd-mm-yy'});
+
+    function assignmentInfo(){
+        $('#myModal').modal();
+    }
+
     $(document).on('click','.addTransaction', function(){
         $('#payForm')[0].reset();
     });
@@ -344,7 +363,7 @@
         $("[data-toggle=popover]").popover();
     });
 
-    $('.datepicker').datepicker();    
+    // $('.datepicker').datepicker();    
 
     $('html').click(function() {
         $('.dropdown-content').css({"display": "none"});        
