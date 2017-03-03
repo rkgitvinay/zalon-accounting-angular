@@ -1,0 +1,51 @@
+<script type="text/javascript">
+    var test;    
+    var line = 0;
+    $(document).on('click','.add-more-btn', function(){                
+        var row =   '<div class="input-group" id="row_'+line+'">'+
+                        '<span class="input-group-addon">'+
+                          '<select class="form-control select_list_'+line+'"> '+
+                             '<option value="volvo">Select List</option>'+
+                          '</select>'+    
+                        '</span>'+
+
+                        '<span class="input-group-addon">'+
+                              '<input type="text" class="form-control" placeholder="Quantity">'+
+                        '</span>'+    
+                        '<span class="input-group-addon custom-row">'+
+                          '<input type="text" class="form-control" placeholder="MRP">'+
+                        '</span>'+
+                          '<span class="input-group-addon">'+
+                          '<input type="text" class="form-control" placeholder="Purchase Price">'+
+                        '</span>'+
+
+                        '<span class="input-group-addon custom-row">'+
+                          '<input type="text"  class="form-control" placeholder="Total">'+
+                        '</span>'+        
+
+                        '<span class="input-group-addon custom-row">'+
+                          '<div data-toggle="buttons">'+
+                            '<span class="btn-delete" data-id="'+line+'">'+
+                              '<i class="fa fa-trash"></i> '+
+                            '</span>'+
+                              '<label class="btn btn-success">'+
+                                  '<input type="radio" name="options" id="option1" autocomplete="off" checked>'+
+                                   'Add'+
+                              '</label>'+
+                              '<label class="btn btn-danger active">'+
+                                  '<input type="radio" name="options" id="option2" autocomplete="off">'+
+                                 'Remove'+
+                              '</label>'+          
+                          '</div>'+          
+                        '</span>'+
+                    '</div>';
+
+            $('#add_order_list').prepend(row);
+
+            $.each(test, function(i,col){
+               $('.select_list_'+line).append('<option value="'+col.id+'">'+col.inventory+'</option>');
+            });
+
+            line++;
+    });
+</script>

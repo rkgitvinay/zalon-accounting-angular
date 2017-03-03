@@ -62,12 +62,22 @@ input[type=number] {
       </form> 
 
 
-      <!-- <div class="navbar-form navbar-right">        
-        <span ng-click="addMoreBtn()" class="btn btn-default add-more-btn">
+      <div class="navbar-form navbar-right">        
+        <!-- <span ng-click="addMoreBtn()" class="btn btn-default add-more-btn">
                 <i class="fa fa-plus"></i>  
              Add
-        </span>
-      </div>  -->
+        </span> -->
+
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add Item
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="list in inventory_list">
+                        <a ng-click="addMoreBtn({id:list.id,name:list.inventory,type:list.inventory_type})" href="javascript:void(0)">{{list.inventory}}</a>
+                    </li>                 
+                </ul>
+            </div>
+      </div> 
 
 
     </div>
@@ -77,51 +87,50 @@ input[type=number] {
 
 
 <div id="content" style="height: 383px;">
+
 <div class="form-group" style="height: 320px; overflow-y: auto;">
+   	<div class="input-group" ng-repeat="item in list.order"> 
 
-	<div class="input-group" ng-repeat="item in list.order">
+        <span class="input-group-addon">      
+            <span>{{item.inventory}}</span>        
+        </span>
 
-      <span class="input-group-addon">
+        <span class="input-group-addon">      
+            <span>{{item.inventory_type}}</span>        
+        </span>
 
-      <!-- <select ng-model="formData.inventory"  class="form-control" ng-options="v.inventory for v in inventory"> 
-
-      </select>    -->   
-        <span>{{item.inventory}}</span>
-
-
-      </span>
-
-      <span class="input-group-addon" ng-init="formData.quantity= item.quantity">
+        <span class="input-group-addon" ng-init="formData.quantity= item.quantity">
 	  		<input type="text" ng-model="formData.quantity" ng-change="formData.total = formData.quantity * formData.purchase_price" class="form-control" placeholder="Quantity">
-      </span>    
+        </span>    
 
-      <span class="input-group-addon custom-row">
-        <input type="text" ng-model="formData.mrp" class="form-control" placeholder="MRP">
-      </span>
+        <span class="input-group-addon custom-row">
+            <input type="text" ng-model="formData.mrp" class="form-control" placeholder="MRP">
+        </span>
 
-     	<span class="input-group-addon">
+        <span class="input-group-addon">
 	  		<input type="text" ng-model="formData.purchase_price" ng-change="formData.total = formData.quantity * formData.purchase_price" class="form-control" placeholder="Purchase Price">
-      </span>
+        </span>
 
-      <span class="input-group-addon custom-row" ng-init="formData.total = formData.quantity * formData.purchase_price">
-        <input type="text" ng-model="formData.total"  class="form-control" placeholder="Total">
-      </span>        
+        <span class="input-group-addon custom-row" ng-init="formData.total = formData.quantity * formData.purchase_price">
+            <input type="text" ng-model="formData.total"  class="form-control" placeholder="Total">
+        </span>        
 
-      <span class="input-group-addon custom-row">	  		
-          <div data-toggle="buttons">
-            <span class="btn-delete" ng-click="deleteOrder(list.order,$index,item.id)">
-              <i class="fa fa-trash"></i> 
-            </span>
-              <label class="btn btn-success" ng-click="setData({order_id:item.id,data:formData,index:$index})">
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked>
+        <span class="input-group-addon custom-row">	  		
+            <div data-toggle="buttons">
+                <span class="btn-delete" ng-click="deleteOrder(list.order,$index,item.id)">
+                    <i class="fa fa-trash"></i> 
+                </span>
+                <label class="btn btn-success" ng-click="setData({order_id:item.id,type:item.type,data:formData,index:$index})">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked>
                    Add
-              </label>
-              <label class="btn btn-danger active" ng-click="deleteData({data:formData,index:$index})">
-                  <input type="radio" name="options" id="option2" autocomplete="off">
-                 Remove
-              </label>          
-          </div>          
-      </span>
+                </label>
+                <label class="btn btn-danger active" ng-click="deleteData({data:formData,order_id:item.id,type:item.type})">
+                    <input type="radio" name="options" id="option2" autocomplete="off">
+                    Remove
+                </label>          
+            </div>          
+        </span>
+
 	</div>
 
 </div>
@@ -129,10 +138,11 @@ input[type=number] {
 
 
 <div class="bottom-menu">
-  <div class="input-group">  
+
+    <div class="input-group">  
 
       <span class="input-group-addon">
-        <input type="number" value="" ng-model="sub_total" class="form-control"  placeholder="Sub Total">
+        <input type="number" value=""  ng-model="sub_total" class="form-control"  placeholder="Sub Total">
       </span>
 
        <span class="input-group-addon">
@@ -159,6 +169,83 @@ input[type=number] {
   </div>
 </div>
 
-<!-- <span> <i class="fa fa-dashboard fa-lg"></span> -->
+<!-- <script type="text/javascript">
+    var test;    
+    var line = 0;
+    $(document).on('click','.add-more-btn', function(){                
+        var row =   '<div class="input-group" id="row_'+line+'">'+
+                        '<span class="input-group-addon">'+
+                          '<select class="form-control select_list_'+line+'"> '+
+                             '<option value="volvo">Select List</option>'+
+                          '</select>'+    
+                        '</span>'+
 
-	
+                        '<span class="input-group-addon">'+
+                              '<input type="text" data-line="'+line+'" id="quantity_'+line+'" class="form-control quantity" placeholder="Quantity">'+
+                        '</span>'+    
+                        '<span class="input-group-addon custom-row">'+
+                          '<input type="text" class="form-control" placeholder="MRP">'+
+                        '</span>'+
+                          '<span class="input-group-addon">'+
+                          '<input type="text" data-line="'+line+'" id="price_'+line+'" class="form-control price" placeholder="Purchase Price">'+
+                        '</span>'+
+
+                        '<span class="input-group-addon custom-row">'+
+                          '<input type="text" data-line="'+line+'" id="total_'+line+'"  class="form-control total" placeholder="Total">'+
+                        '</span>'+        
+
+                        '<span class="input-group-addon custom-row">'+
+                          '<div data-toggle="buttons">'+
+                            '<span class="btn-delete" data-id="'+line+'">'+
+                              '<i class="fa fa-trash"></i> '+
+                            '</span>'+
+                              '<label data-line="'+line+'" class="btn btn-success dynamic_add">'+
+                                  '<input type="radio" name="options"  autocomplete="off" checked>'+
+                                   'Add'+
+                              '</label>'+
+                              '<label data-line="'+line+'" class="btn btn-danger active dynamic_remove">'+
+                                  '<input type="radio" name="options"  autocomplete="off">'+
+                                 'Remove'+
+                              '</label>'+          
+                          '</div>'+          
+                        '</span>'+
+                    '</div>';
+
+            $('#add_order_list').prepend(row);
+
+            $.each(test, function(i,col){
+               $('.select_list_'+line).append('<option value="'+col.id+'">'+col.inventory+'</option>');
+            });
+            line++;
+    });
+
+
+  
+
+    $(document).on('keyup','.price',function(){
+        var line = $(this).data('line');
+        var textone = parseFloat($('#quantity_'+line).val());
+        var texttwo = parseFloat($('#price_'+line).val());
+        var result = textone * texttwo;
+        $('#total_'+line).val(result.toFixed(2));
+    });
+
+    $(document).on('click','.dynamic_add',function(){
+        var line = $(this).data('line');
+        var quantity = parseFloat($('#quantity_'+line).val());
+        var price = parseFloat($('#price_'+line).val());
+        var inventory_id = parseFloat($('.select_list_'+line).val());
+        var item_total = parseInt($('#total_'+line).val()); 
+
+        var sub_total = parseInt($('#sub_total').val());
+        var total = parseInt($('#total').val());
+       
+        $('#sub_total').val(item_total + sub_total);
+        $('#total').val(item_total + total);
+
+        
+        
+    });
+
+</script>
+	 -->

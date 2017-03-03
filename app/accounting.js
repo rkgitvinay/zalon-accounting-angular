@@ -248,10 +248,10 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
     } 
 });
 
-phpro.controller('OtherCtrl', function($scope,$http) {   
+phpro.controller('OtherCtrl', function($scope,$http,$window) {   
 
     var data = [];
-    var url = 'http://'+base_url+'/accounting/getPurchaseOrder?access_token='+access_token;
+    var url = 'http://'+local_url+'/accounting/getPurchaseOrder?access_token='+access_token;
     $http({
         method  : 'GET',
         url     : url,
@@ -260,6 +260,7 @@ phpro.controller('OtherCtrl', function($scope,$http) {
             $scope.supplier = response.data.supplier[0].name;
             $scope.supplier_id = response.data.supplier[0].id;
             $scope.list = response.data;
+            $scope.inventory_list = response.data.list;
         }
     }); 
 
@@ -277,41 +278,27 @@ phpro.controller('OtherCtrl', function($scope,$http) {
         });
     }
    
-    $scope.addMoreBtn =  function(){        
-        var url = 'http://'+base_url+'/accounting/getInventoryList';
-        $http({
-            method  : 'GET',
-            url     : url,
-            params  : {access_token:access_token}   
-        }).then(function(response){   
-            if(response.data.status == 'success'){  
-
-
-                $scope.list.order.unshift({});
-
-                $scope.inventory = response.data.list;                             
-            }
-        });        
+    $scope.addMoreBtn =  function(list){
+        $scope.list.order.unshift({id:list.id,inventory:list.name,type:'dynamic',inventory_type:list.type});
     }  
 
 
     $scope.sub_total = 0;  
 
-    $scope.setData = function(item){       
+    $scope.setData = function(item){              
         $scope.sub_total = $scope.sub_total + item.data.total; 
-        data.push({order_id:item.order_id,index:item.index,item:item.data}); 
+        data.push({order_id:item.order_id,type:item.type,item:item.data}); 
         console.log(data);
     }
 
     
     $scope.deleteData = function(item){
-        console.log(item);
+        //console.log(item);
 
-        $scope.sub_total = $scope.sub_total - item.data.total; 
+        $scope.sub_total = $scope.sub_total - item.data.total;         
         
-        console.log($scope.sub_total);
         for(var i=0; i<data.length; i++){
-            if(data[i].index == item.index){
+            if(data[i].order_id == item.order_id && data[i].type == item.type){
                 data.splice(i, 1);  //removes 1 element at position i 
                 break;
             }
@@ -325,7 +312,7 @@ phpro.controller('OtherCtrl', function($scope,$http) {
     $scope.setOrderData = function(order){
         var info = [];        
         info.push(data);       
-        var url = 'http://'+base_url+'/accounting/setOrderData';
+        var url = 'http://'+local_url+'/accounting/setOrderData';
         $http({
             method  : 'GET',
             url     : url,
