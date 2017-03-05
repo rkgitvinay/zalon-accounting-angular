@@ -25,7 +25,7 @@ $routeProvider
 var access_token = location.search.split('access_token=')[1];
 var base_url = 'zalonstyle.in:8080';
 var local_url = 'localhost:3000';
-phpro.controller('HomeCtrl', function($scope,$http,$window){  
+phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){  
     var selected_id;
 
     var url = 'http://'+base_url+'/accounting/getPaymentMethods?access_token='+access_token;
@@ -34,7 +34,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window){
         url     : url           
     }).then(function(response){
         if(response.data.result.length > 0){
-            $scope.accounts = response.data.result; 
+            $rootScope.accounts = response.data.result; 
             $scope.selected = response.data.result[0].id;
             selected_id     = response.data.result[0].id;
             $scope.acc_name = response.data.result[0].account_name;
@@ -202,6 +202,64 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
 
     }); 
 
+     $scope.getSubCategory = function(cat){        
+        if(cat== 'Vendor' || cat == 'Staff'){
+            $scope.subCat = true;
+            var url = 'http://'+base_url+'/accounting/getSubCategory';
+            $http({
+                method  : 'GET',
+                url     : url ,
+                params  :{access_token:access_token,category:cat}          
+            }).then(function(response){               
+                if(response.data.result.length > 0){                    
+                    $scope.subCategory = response.data.result; 
+                    if(cat=='Vendor')
+                        $scope.testOpt = 'select Vendor';          
+                    else
+                        $scope.testOpt = 'select Staff';          
+                }
+            });
+        }else{
+            $scope.subCat = false;
+        }
+    }
+
+     $scope.addTransaction = function(){        
+        if($scope.payment_id == undefined){
+            var payment_type_id = $scope.selected;
+        }else{
+            var payment_type_id  = $scope.payment_id;
+        }
+        if($window.type==3){
+            $scope.payForm['type_from'] = $scope.payment_id_from;
+            $scope.payForm['type_to']   = $scope.payment_id_to;
+        }
+        $scope.payForm['type'] = $window.type; //1=> pay, 2=>receive, 3=> transfer  
+        $scope.payForm['cat_id']  = $scope.cat_id;
+        $scope.payForm['subCat_id']  = $scope.subCat_id;        
+        $scope.payForm['access_token']  = access_token;
+        $scope.payForm['payment_type_id'] = payment_type_id;
+        var url = 'http://'+base_url+'/accounting/addTransaction';   
+        var data =  JSON.stringify($scope.payForm);
+        $http({
+            method  : 'POST',
+            url     : url,
+            data    : {payload:data}
+        }).then(function(response){
+            if(response.data.status == 'success' && payment_type_id == $scope.selected){
+                // $scope.payment_log.unshift(response.data.result[0]);
+                // $scope.accounts = response.data.account;  
+                $scope.payForm = {}; 
+            }             
+        }); 
+    }
+
+    $scope.showInactive =  function(){
+        //console.log('test');
+        //item.toggle = !item.toggle;
+        vendor.is_active = !vendor.is_active;
+    }
+
     function getSum(result){
         var pay = 0;
         var get = 0;
@@ -227,6 +285,8 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
             if(response.data.result.length > 0){                    
                $scope.payment_log = response.data.result; 
                $scope.stats = getSum(response.data.result);
+            }else{
+                $scope.payment_log = {}; 
             }
             // console.log(response);
         });
@@ -251,7 +311,7 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
 phpro.controller('OtherCtrl', function($scope,$http,$window) {   
 
     var data = [];
-    var url = 'http://'+local_url+'/accounting/getPurchaseOrder?access_token='+access_token;
+    var url = 'http://'+base_url+'/accounting/getPurchaseOrder?access_token='+access_token;
     $http({
         method  : 'GET',
         url     : url,
@@ -312,7 +372,7 @@ phpro.controller('OtherCtrl', function($scope,$http,$window) {
     $scope.setOrderData = function(order){
         var info = [];        
         info.push(data);       
-        var url = 'http://'+local_url+'/accounting/setOrderData';
+        var url = 'http://'+base_url+'/accounting/setOrderData';
         $http({
             method  : 'GET',
             url     : url,
