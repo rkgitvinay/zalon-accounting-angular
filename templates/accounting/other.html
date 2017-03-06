@@ -117,7 +117,7 @@ input[type=number] {
 
         <span class="input-group-addon custom-row">	  		
             <div data-toggle="buttons">
-                <span class="btn-delete" ng-click="deleteOrder(list.order,$index,item.id)">
+                <span class="btn-delete" ng-click="deleteOrder(list.order,item.type,$index,item.id)">
                     <i class="fa fa-trash"></i> 
                 </span>
                 <label class="btn btn-success" ng-click="setData({order_id:item.id,type:item.type,data:formData,index:$index})">
@@ -162,7 +162,7 @@ input[type=number] {
       </span>     
 
       <span class="input-group-addon" style="padding-left: 0px;padding-right: 0px;padding-top: 6px;">
-        <button class="add btn btn-success" type="button" ng-click="setOrderData({invoice:invoice,description:description,sub_total:sub_total,vat:vat,cartrage:cartrage,other:other,total:total})">Close</button>
+        <button class="add btn btn-success" type="button" ng-click="setOrderData({invoice:invoice,description:description,sub_total:sub_total,vat:vat,cartrage:cartrage,other:other,total:total})"> Save & Close</button>
         <button class="add btn btn-danger" type="button">Cancel</button>
       </span>
 

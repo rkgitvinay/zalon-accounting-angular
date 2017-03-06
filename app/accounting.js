@@ -25,6 +25,8 @@ $routeProvider
 var access_token = location.search.split('access_token=')[1];
 var base_url = 'zalonstyle.in:8080';
 var local_url = 'localhost:3000';
+
+
 phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){  
     var selected_id;
 
@@ -71,7 +73,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
         $http({
             method  : 'GET',
             url     : 'http://'+base_url+'/accounting/getStatsByCategory',
-            params  :{access_token:access_token,payment_type_id:select.id}          
+            params  :{access_token:access_token,payment_type_id:select.id,account_name:select.name}          
         }).then(function(response){ 
             $scope.payment_log  = response.data.result;                       
         });   
@@ -179,7 +181,9 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
 
 });
 
-phpro.controller('InfoCtrl', function($scope,$http,$window) {
+phpro.controller('InfoCtrl', function($scope,$http,$window,$rootScope) {
+    console.log($rootScope.accounts);
+    //$scope.accounts = $rootScope.accounts;
     var seclectCategory ;
     var selectId;
 
@@ -274,7 +278,7 @@ phpro.controller('InfoCtrl', function($scope,$http,$window) {
     $scope.getCategoryStats = function(cat){
         seclectCategory = cat.category;
         selectId = cat.id;
-        $scope.transaction_type = cat.category;
+        $scope.transaction_type = cat.name;
         $scope.sublist = 'zalon';
         var url = 'http://'+base_url+'/accounting/getTransactionList';
         $http({
@@ -391,17 +395,30 @@ phpro.controller('OtherCtrl', function($scope,$http,$window) {
         });
     }
 
-    $scope.deleteOrder = function(list,index,order_id){        
-        var url = 'http://'+base_url+'/accounting/deleteOrder';
-        $http({
-            method  : 'GET',
-            url     : url,
-            params  : {access_token:access_token,order_id:order_id}   
-        }).then(function(response){ 
-            if(response.data.status == 'success'){
-                list.splice(index, 1);    
-            }
-        });
+    $scope.deleteOrder = function(list,type,index,order_id){ 
+        if(type != 'dynamic'){
+
+            var url = 'http://'+base_url+'/accounting/deleteOrder';
+            $http({
+                method  : 'GET',
+                url     : url,
+                params  : {access_token:access_token,order_id:order_id}   
+            }).then(function(response){ 
+                if(response.data.status == 'success'){
+                    list.splice(index, 1);    
+                }
+            });
+
+        }else{
+
+           for(var i=0; i< $scope.list.order.length; i++){
+                if($scope.list.order[i].id == order_id && $scope.list.order[i].type == type){
+                    $scope.list.order.splice(i, 1);  //removes 1 element at position i 
+                    break;
+                }
+            }  
+        }
+       
     }
 
     $scope.total =  function(){

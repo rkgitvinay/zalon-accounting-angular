@@ -38,7 +38,10 @@
     <div class="row">
         <div class="col-sm-3 nopadding" style="background-color: #fafbfb;height: 445px;">
            <div class="menu-head" style="background-color: #ffffff;border-right: 1px solid antiquewhite">
-                <span data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus icon" aria-hidden="true"></i></span>
+                <button style="padding: 0px 12px !important;" data-toggle="modal" data-target="#exampleModal" class="btn btn-default">
+                    <i class="fa fa-plus icon" aria-hidden="true"></i>Create A/C
+                <!-- </span> -->
+                </button>
                 <span class="pull-right" ng-model="checkEdit" ng-click="deleteActionBtn()"><i class="fa fa-pencil-square-o icon" aria-hidden="true"></i></span>
             </div>
 
@@ -53,7 +56,7 @@
                               <span class="card-value">{{account.balance}}</span>                            
                           </a>
                         </span>
-                        <span ng-if="deleteAcc" id="btnDelete" ng-click="deletAccount({id:account.id,name:account.account_name})">
+                        <span ng-if="deleteAcc" id="btnDelete" ng-click="deletAccount({id:account.id,name:account.account_name})" confirm='Are you sure?'>
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </span>
                     </div>
@@ -90,6 +93,7 @@
                         <tr id="tr">
                           <th>Date</th>
                           <th>Payee</th>
+                          <th>Name</th>
                           <th>Description</th>
                           <th>Amount</th>
                           <th>Balance</th>
@@ -97,9 +101,10 @@
                     </thead>
                     <tbody id="tbody">
 
-                        <tr ng-repeat="log in payment_log" id="tr">
+                        <tr ng-repeat="log in payment_log | orderBy:'-date'" id="tr">
                             <td>{{log.date}}</td>
                             <td>{{log.category}}</td>
+                            <td>{{log.sub_category}}</td>
                             <td ng-if="log.description == ''">initial</td>
                             <td ng-if="log.description != ''">{{log.description}}</td>
 

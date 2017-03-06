@@ -18,7 +18,7 @@
                       <div class="menu-list">                
                           <ul ng-repeat="cat in category" id="menu-content" class="menu-content collapse in">
                               
-                              <li ng-class="{active_list:cat.category_name==transaction_type}" ng-if="cat.category_name != 'Vendor' && cat.category_name != 'Staff'" ng-click="getCategoryStats({id:cat.id,category:cat.category_name})">
+                              <li ng-class="{active_list:cat.category_name==transaction_type}" ng-if="cat.category_name != 'Vendor' && cat.category_name != 'Staff'" ng-click="getCategoryStats({id:cat.id,name:cat.category_name,category:cat.category_name})">
                                 <a href="javascript:void(0)">
                                   <i class="fa fa-dashboard fa-lg"></i>{{cat.category_name}}
                                 </a>
@@ -32,7 +32,7 @@
 
                               <ul ng-if="cat.category_name == 'Vendor'" class="sub-menu collapse" id="vendor">                                 
                                   <div ng-repeat="vendor in vendors" ng-if="vendor.is_active == 'true'">
-                                    <li ng-if="vendor.name != null" ng-click="getCategoryStats({id:vendor.vendor_id,category:vendor.category})">
+                                    <li ng-if="vendor.name != null" ng-click="getCategoryStats({id:vendor.vendor_id,name:vendor.name,category:vendor.category})">
                                       <a href="javascript:void(0)">{{vendor.name}}</a>
                                     </li>  
                                   </div>
@@ -47,7 +47,7 @@
 
                               <ul ng-if="cat.category_name == 'Staff'" class="sub-menu collapse" id="staff">                                 
                                   <div ng-repeat="staff in staffs">
-                                    <li ng-if="staff.name != null" ng-click="getCategoryStats({id:staff.staff_id,category:staff.category})"><a href="javascript:void(0)">{{staff.name}}</a></li>  
+                                    <li ng-if="staff.name != null" ng-click="getCategoryStats({id:staff.staff_id,name:staff.name,category:staff.category})"><a href="javascript:void(0)">{{staff.name}}</a></li>  
                                   </div>                              
                               </ul>
                           </ul>
@@ -87,7 +87,7 @@
                     </thead>
                     <tbody id="tbody">
 
-                        <tr ng-repeat="log in payment_log" id="tr">
+                        <tr ng-repeat="log in payment_log | orderBy:'-date'" id="tr">
                             <td>{{log.date}}</td>
                             <td>{{log.payee}}</td>
                             <td>{{log.description}}</td>
@@ -209,7 +209,7 @@
                       </div>
 
                       <div class="form-group">                        
-                        <select ng-model="payment_id" ng-init="acc_name" class="form-control">                         
+                        <select ng-model="payment_id" ng-init="acc_name" class="form-control">                        
                           <option ng-repeat="account in accounts" value="{{account.id}}">{{account.account_name}}</option>                          
                         </select>
                       </div>
