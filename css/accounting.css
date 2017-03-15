@@ -11,7 +11,7 @@
 .cards{
 	background-color: #e4e6e6;
 	overflow-y: auto;
-	height: 405px;
+	height: 412px;
 }
 .active_card{
 	background-color: #babdbd;
@@ -127,7 +127,7 @@ th{
 
 #tbody {
     display:block;
-    height:372px;
+    height:382px;
     overflow:auto;
 }
 #thead, #tbody #tr {
