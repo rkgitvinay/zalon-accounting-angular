@@ -1,7 +1,8 @@
 <style type="text/css">
   .input-group-addon{
-    padding: 3px 5px !important;
+    padding: 3px 2px !important;
     border: none;
+    width: 10% !important;
   }
   .btn.active {                
   display: none;    
@@ -36,6 +37,14 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance:textfield;
 }
+.iosBtn{
+  border: solid;
+  border-color:  #122af3;
+  color:  #122af3 ;
+  padding: 3px 12px;
+  border-width: 2px;
+  /*font-weight: bold;*/
+}
 </style>
 
 <nav class="navbar navbar-default" style="margin-bottom: 8px;">
@@ -69,7 +78,7 @@ input[type=number] {
         </span> -->
 
             <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add Item
+                <button class="btn btn-default iosBtn dropdown-toggle" type="button" data-toggle="dropdown">Add Item
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li ng-repeat="list in inventory_list">
@@ -158,12 +167,12 @@ input[type=number] {
       </span>
 
       <span class="input-group-addon">
-        <input type="text" class="form-control" ng-value="total()"  placeholder="Total">
+        <input type="text" class="form-control" ng-value="total()"  placeholder="Total" disabled>
       </span>     
 
       <span class="input-group-addon" style="padding-left: 0px;padding-right: 0px;padding-top: 6px;">
-        <button class="add btn btn-success" type="button" ng-click="setOrderData({invoice:invoice,description:description,sub_total:sub_total,vat:vat,cartrage:cartrage,other:other,total:total})"> Save & Close</button>
-        <button class="add btn btn-danger" type="button">Cancel</button>
+        <button class="add btn btn-default iosBtn" type="button" ng-click="setOrderData({invoice:invoice,description:description,sub_total:sub_total,vat:vat,cartrage:cartrage,other:other,total:total})"> Save & Close</button>
+        <button class="add btn btn-default iosBtn" type="button">Cancel</button>
       </span>
 
   </div>

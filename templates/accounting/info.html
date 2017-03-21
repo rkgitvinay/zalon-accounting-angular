@@ -8,7 +8,7 @@
            <div class="menu-head" style="background-color: #ffffff;border-right: 1px solid antiquewhite">
                 <!-- <span data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus icon" aria-hidden="true"></i></span> -->
                   <span>
-                      <a href="javascript:void(0)" ng-click="showInactive()">show</a>
+                     <!--  <a href="javascript:void(0)" ng-click="showInactive()">show</a> -->
                   </span>
             </div>
 
@@ -62,7 +62,7 @@
                 <span class="dropdown">
                     <i class="fa fa-calendar dropbtn icon" aria-hidden="true"></i>
                     <div class="dropdown-content">
-                        <a href="#">All Dates</a>                        
+                        <a href="javascript:void(0)" ng-click="allDate()">All Dates</a>
                         <a href="javascript:void(0)" onclick="assignmentInfo()">Custom</a>
                     </div>
                 </span>
@@ -87,7 +87,7 @@
                     </thead>
                     <tbody id="tbody">
 
-                        <tr ng-repeat="log in payment_log | orderBy:'-date'" id="tr">
+                        <tr ng-repeat="log in payment_log | orderBy:'-created_at'" id="tr">
                             <td>{{log.date}}</td>
                             <td>{{log.payee}}</td>
                             <td>{{log.description}}</td>

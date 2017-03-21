@@ -26,21 +26,34 @@
     width:100%;
     table-layout:fixed;
 } 
+#thead #tr th{
+    background-color: white;
+    border-color: #122af3;
+} 
 
 #btnDelete{
   color: #bf2911;
   margin-left: 25px;
   cursor: pointer;   
 }
+.iosBtn{
+  border: solid;
+  border-color:  #122af3;
+  color:  #122af3 ;
+  padding: 3px 12px;
+  border-width: 2px;
+  /*font-weight: bold;*/
+}
     
 </style>
 <div class="container" style="width: 100% !important;">
     <div class="row">
         <div class="col-sm-3 nopadding" style="background-color: #fafbfb;height: 456px;">
-           <div class="menu-head" style="background-color: #ffffff;border-right: 1px solid antiquewhite">
-                <button style="padding: 0px 12px !important;" data-toggle="modal" data-target="#exampleModal" class="btn btn-default">
-                    <i class="fa fa-plus icon" aria-hidden="true"></i>Create A/C
-                <!-- </span> -->
+           <div class="menu-head" style="background-color: #ffffff;border-right: 1px solid antiquewhite;">
+                <button style="padding: 0px 12px !important;" data-toggle="modal" data-target="#exampleModal" class="btn btn-default iosBtn">
+                    <!-- <i class="fa fa-plus icon" aria-hidden="true"></i> -->
+                    Create A/C
+                
                 </button>
                 <span class="pull-right" ng-model="checkEdit" ng-click="deleteActionBtn()"><i class="fa fa-pencil-square-o icon" aria-hidden="true"></i></span>
             </div>
@@ -51,13 +64,15 @@
                     <div class="cad-group" ng-class='{active_card: account.id==selected}'>
                         <span>
                           <a href="javascript:void(0)" ng-click="getAccountStats({id:account.id,name:account.account_name})" class="button btn btn-primary btn-lg btn-block">
-                              <span class="pull-left card-icon"><i class="fa fa-address-card-o icon" aria-hidden="true"></i></span>
+                              <span class="pull-left card-icon">
+                                <i class="fa fa-money icon" aria-hidden="true"></i>
+                              </span>
                               <span class="card-name">{{account.account_name}}</span>
                               <span class="card-value">{{account.balance}}</span>                            
                           </a>
                         </span>
                         <span ng-if="deleteAcc" id="btnDelete" ng-click="deletAccount({id:account.id,name:account.account_name})" confirm='Are you sure?'>
-                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <i ng-if="account.account_name != 'Cash'" class="fa fa-trash" aria-hidden="true"></i>
                         </span>
                     </div>
                     
@@ -71,18 +86,19 @@
         </div>
 
         <div class="col-sm-9 nopadding" style="background-color: #ffffff;height: 456px;">   
-            <div class="menu-head">
+            <div class="menu-head" style="border-color: #122af3; border-bottom: solid; border-width: 2px;">
                 <span class="dropdown">
                     <i class="fa fa-calendar dropbtn icon" aria-hidden="true"></i>
                     <div class="dropdown-content">
-                        <a href="#">All Dates</a>                        
+                        <a href="javascript:void(0)" ng-click="allDate()">All Dates</a>                        
                         <a href="javascript:void(0)" onclick="assignmentInfo()">Custom</a>
                     </div>
                 </span>
                 <!-- {{selected}}/{{acc_name}} -->
                 <b><span style="margin-left: 40%;">{{acc_name}}</span></b>
-                 <button style="padding: 2px 12px !important;" data-toggle="modal" data-target="#addExpenseModal" class="btn btn-default pull-right">
-                    <i class="fa fa-plus icon" aria-hidden="true"></i> Add Transaction
+                 <button style="padding: 0px 12px !important;" data-toggle="modal" data-target="#addExpenseModal" class="btn btn-default iosBtn pull-right">
+                    <!-- <i class="fa fa-exchange icon" aria-hidden="true"></i>  -->
+                    Add Transaction
                 <!-- </span> -->
                 </button>
             </div>
@@ -101,7 +117,7 @@
                     </thead>
                     <tbody id="tbody">
 
-                        <tr ng-repeat="log in payment_log | orderBy:'-date'" id="tr">
+                        <tr ng-repeat="log in payment_log | orderBy:'-created_at'" id="tr">
                             <td>{{log.date}}</td>
                             <td>{{log.category}}</td>
                             <td>{{log.sub_category}}</td>

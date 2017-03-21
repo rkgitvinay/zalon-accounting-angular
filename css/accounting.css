@@ -62,7 +62,7 @@
     z-index: 1;
 }
 .icon{
-	color: #44d7fb;
+	color: #122af3;
 	font-size: 20px;
 	cursor: pointer;
 }
@@ -163,7 +163,7 @@ th{
   list-style: none;
   padding: 0px;
   margin: 0px;
-  line-height: 45px;
+  line-height: 55px;
   cursor: pointer;
   /*    
     .collapsed{
@@ -231,11 +231,12 @@ th{
 .nav-side-menu li a {
   text-decoration: none;
   color: #e1ffff;
+  font-size: 15px;
 }
 .nav-side-menu li a i {
   padding-left: 10px;
   width: 20px;
-  padding-right: 20px;
+  padding-right: 26px;
 }
 .nav-side-menu li:hover {
   border-left: 3px solid #d19b3d;
