@@ -23,8 +23,8 @@ $routeProvider
         });
 });
 var access_token = location.search.split('access_token=')[1];
-var base_url = 'zalonstyle.in:8080';
-var local_url = 'localhost:3000';
+//var base_url = '52.33.37.151:8080';
+var base_url = 'localhost:3000';
 
 
 phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){  
@@ -44,6 +44,8 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
             $scope.category.unshift({id:0,category_name:'Select Category'});                         
             $scope.cat_id   = $scope.category[0].category_name;
             $scope.payment_log = response.data.payment_log;
+            $scope.cash_sale = response.data.cash;
+            $scope.non_cash = response.data.non_cash;
         }
     });   
     
@@ -111,10 +113,11 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
             }).then(function(response){               
                 if(response.data.result.length > 0){                    
                     $scope.subCategory = response.data.result; 
-                    if(cat=='Vendor')
-                        $scope.testOpt = 'select Vendor';          
-                    else
-                        $scope.testOpt = 'select Staff';          
+                    if(cat == 'Vendor'){
+                        $scope.testOpt = 'Select Vendor';          
+                    }else{
+                        $scope.testOpt = 'Select Staff';          
+                    }
                 }
             });
         }else{
@@ -166,7 +169,7 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
     }
 
     $scope.deletAccount = function(acc){
-        if(window.confirm("are you sure ?")){
+        //if(window.confirm("are you sure ?")){
             $http({
                 method  : 'GET',
                 url     : 'http://'+base_url+'/accounting/deletAccount',
@@ -187,15 +190,13 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
                    window.alert(response.data.message); 
                 }         
             }); 
-        }
+        //}
     }
 
 
 });
 
 phpro.controller('InfoCtrl', function($scope,$http,$window,$rootScope) {
-    console.log($rootScope.accounts);
-    //$scope.accounts = $rootScope.accounts;
     var seclectCategory ;
     var selectId;
 
@@ -211,6 +212,9 @@ phpro.controller('InfoCtrl', function($scope,$http,$window,$rootScope) {
             selectId = response.data.category[0].id;
 
             $scope.category = response.data.category; 
+            // $scope.category.unshift({id:0,category_name:'Select Category'});                         
+            // $scope.cat_id   = $scope.category[0].category_name;
+
             $scope.vendors   = response.data.vendors;
             $scope.staffs    = response.data.staff;           
             $scope.payment_log = response.data.log;
@@ -230,9 +234,9 @@ phpro.controller('InfoCtrl', function($scope,$http,$window,$rootScope) {
                 if(response.data.result.length > 0){                    
                     $scope.subCategory = response.data.result; 
                     if(cat=='Vendor')
-                        $scope.testOpt = 'select Vendor';          
+                        $scope.testOpt = 'Select Vendor';          
                     else
-                        $scope.testOpt = 'select Staff';          
+                        $scope.testOpt = 'Select Staff';          
                 }
             });
         }else{
@@ -306,6 +310,52 @@ phpro.controller('InfoCtrl', function($scope,$http,$window,$rootScope) {
             }            
         });
     } 
+
+    $scope.getBillInfo = function(invoice){
+        var url = 'http://'+base_url+'/accounting/getBillInfo';
+        $http({
+            method  : 'GET',
+            url     : url ,
+            params  :{access_token:access_token,invoice:invoice}          
+        }).then(function(response){               
+            $scope.items = response.data.items;
+            $scope.result = response.data.result;          
+        });
+
+    }
+    var invoice_number = 0;
+    $scope.setInvoiceNum = function(invoice){
+        invoice_number = invoice;
+    }
+
+    $scope.applyPayMethod = function(){
+        var method = {
+            access_token:access_token,
+            payment_method:parseInt($scope.payment_id),
+            invoice:invoice_number,
+            narration:'billing'
+        };
+        var url = 'http://'+base_url+'/accounting/applyPaymentMethod';
+        var data =  JSON.stringify(method);
+        $http({
+            method  : 'POST',
+            url     : url,
+            data    : {payload:data}
+        }).then(function(response){
+            $scope.payment_log = response.data.log;         
+        }); 
+    }
+
+    $scope.resendSms = function(invoice){
+        var url = 'http://'+base_url+'/accounting/resendSms';
+        $http({
+            method  : 'GET',
+            url     : url ,
+            params  :{access_token:access_token,invoice:invoice}          
+        }).then(function(response){ 
+            swal("Sent", "message has been sent!", "success")   
+        });
+    }
 
     $scope.allDate = function(){
         var url = 'http://'+base_url+'/accounting/getTransactionList';

@@ -76,17 +76,23 @@
                         </span>
                     </div>
                     
-                </div>                            
+                </div>                    
            </div>
 
-          <!--  <div class="bottom-menu">
-                hello
-            </div> -->
+           <div class="bottom-menu">
+                <span>
+                  Cash Sale - {{cash_sale}}
+                </span>
+                <br>
+                 <span>
+                  Non Cash Sale - {{non_cash}}
+                </span>
+            </div>
 
         </div>
 
         <div class="col-sm-9 nopadding" style="background-color: #ffffff;height: 456px;">   
-            <div class="menu-head" style="border-color: #122af3; border-bottom: solid; border-width: 2px;">
+            <div class="menu-head" style="color: #122af3; border-bottom: solid; border-width: 2px;">
                 <span class="dropdown">
                     <i class="fa fa-calendar dropbtn icon" aria-hidden="true"></i>
                     <div class="dropdown-content">
@@ -95,7 +101,7 @@
                     </div>
                 </span>
                 <!-- {{selected}}/{{acc_name}} -->
-                <b><span style="margin-left: 40%;">{{acc_name}}</span></b>
+                <b><span style="margin-left: 40%;color: black;">{{acc_name}}</span></b>
                  <button style="padding: 0px 12px !important;" data-toggle="modal" data-target="#addExpenseModal" class="btn btn-default iosBtn pull-right">
                     <!-- <i class="fa fa-exchange icon" aria-hidden="true"></i>  -->
                     Add Transaction
@@ -197,11 +203,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <a href="#" data-dismiss="modal">Close</a>
-        <span style="margin-left: 35%;font-size: 15px;"><b>New Transaction</b></span>
+        <span style="margin-left: 26%;font-size: 15px;"><b>New Transaction</b></span>
         <a href="javascript:void(0);" data-dismiss="modal" ng-click="addTransaction()" class="pull-right addTransaction">Save</a>
       </div>
       <div class="modal-body" style="padding: 0 !important;">
-          <div class="btn-group selector"  data-toggle="buttons" style="padding-left: 25%;">
+          <div class="btn-group selector"  data-toggle="buttons" style="padding-left: 28%;">
               <label class="btn btn-primary blue active">
                 <input type="radio" class="toggle" value="1">Pay
               </label>
@@ -229,7 +235,8 @@
                       </div>
 
                       <div class="form-group">                        
-                        <select ng-model="payment_id" ng-init="acc_name" class="form-control">                         
+                        <select ng-model="payment_id" ng-init="acc_name" class="form-control">   
+                          <option value=''>Select Payment Method</option>                      
                           <option ng-repeat="account in accounts" value="{{account.id}}">{{account.account_name}}</option>                          
                         </select>
                       </div>
@@ -261,7 +268,8 @@
                       </div>
 
                       <div class="form-group">                        
-                        <select ng-model="payment_id" ng-init="acc_name" class="form-control">                         
+                        <select ng-model="payment_id" ng-init="acc_name" class="form-control">  
+                          <option value=''>Select Payment Method</option>                        
                           <option ng-repeat="account in accounts" value="{{account.id}}">{{account.account_name}}</option>                          
                         </select>
                       </div>
@@ -281,12 +289,14 @@
                   <fieldset>                                            
                       <div class="form-group">                        
                         <select ng-model="payment_id_from" ng-init="acc_name" class="form-control">
+                        <option value=''>Transfer From Account</option> 
                           <option ng-repeat="account in accounts" value="{{account.id}}">{{account.account_name}}</option>                          
                         </select>
                       </div>
 
                       <div class="form-group">                        
                         <select ng-model="payment_id_to" ng-init="acc_name" class="form-control">
+                          <option value=''>Transfer To Account</option> 
                           <option ng-repeat="account in accounts" value="{{account.id}}">{{account.account_name}}</option>                          
                         </select>
                       </div>

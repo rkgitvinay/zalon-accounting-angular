@@ -145,7 +145,8 @@
 
 <script>
 var access_token = location.search.split('access_token=')[1];
-var url = 'http://zalonstyle.in:8080/admin/customers?access_token='+access_token;
+local_url = 'localhost:3000';
+var url = 'http://'+local_url+'/admin/customers?access_token='+access_token;
 
 var ctx = document.getElementById("pieChart");
 var bar = document.getElementById("barChart");

@@ -156,7 +156,8 @@
 
 <script>
 var access_token = location.search.split('access_token=')[1];
-var url = 'http://zalonstyle.in:8080/admin/dashboard?access_token='+access_token;
+local_url = 'localhost:3000';
+var url = 'http://'+local_url+'/admin/dashboard?access_token='+access_token;
 
 //var url = 'http://zalonstyle.in:8080/admin/dashboard';
 

@@ -1,0 +1,27 @@
+<div style="background-color: white;padding: 10px;">
+  <table class="table" style="margin-bottom: 0px !important;">
+    <thead>
+      <tr>
+        <th style="text-align: left;">Staff Name</th>
+        <th style="text-align: center;">Customer Attended</th>
+        <th style="text-align: right;">Sales Generated</th>
+      </tr>
+    </thead>
+    <tbody style="overflow-y: auto;height: 310px;">
+      <tr ng-repeat="item in list">
+        <td style="text-align: left;">{{item.name}}</td>
+        <td style="text-align: center;">{{item.clients}}</td>
+        <td style="text-align: right;">{{item.total}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table" style="margin-bottom: 4px !important;">
+    <thead>
+      <tr style="border-top: solid;border-width: 1px;border-color: #ddd;">
+        <th style="text-align: left;">Total</th>
+        <th style="text-align: center;">{{stat.client}}</th>
+        <th style="text-align: right;">{{stat.money}}</th>
+      </tr>
+    </thead>
+  </table>
+</div>

@@ -80,7 +80,7 @@ input[type=number] {
             <div class="dropdown">
                 <button class="btn btn-default iosBtn dropdown-toggle" type="button" data-toggle="dropdown">Add Item
                 <span class="caret"></span></button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" style="height: 250px; overflow-y: auto;">
                     <li ng-repeat="list in inventory_list">
                         <a ng-click="addMoreBtn({id:list.id,name:list.inventory,type:list.inventory_type})" href="javascript:void(0)">{{list.inventory}}</a>
                     </li>                 
