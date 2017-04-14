@@ -171,10 +171,14 @@
                     <input ng-model="accFormInfo.type" name="type" value="bank" type="radio">
                         Bank
                     </label> 
-                    <label class="radio-inline pull-right" for="radios-1">
+                    <label style="margin-left: 9%;"  class="radio-inline" for="radios-1">
                         <input ng-model="accFormInfo.type" name="type" value="wallet" type="radio">
                         Wallet
-                    </label> 
+                    </label>
+                    <label class="radio-inline pull-right" for="radios-1">
+                        <input ng-model="accFormInfo.type" name="type" value="other" type="radio">
+                        Other
+                    </label>  
                 </div>
                 <div class="ios-input input-cc" style="display: none;">
                     <span>Do you have any credit card linked with this bank</span>
@@ -187,7 +191,7 @@
                         No
                     </label> 
                 </div>
-        </fieldset>
+            </fieldset>
         </form>
 
       </div>     
