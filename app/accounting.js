@@ -175,7 +175,8 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
                 url     : 'http://'+base_url+'/accounting/deletAccount',
                 params  :{access_token:access_token,payment_type_id:acc.id}          
             }).then(function(response){ 
-                if(response.data.status == 'success'){            
+                if(response.data.status == 'success'){ 
+                    swal("Success!", "Your account has been deleted!", "success")           
                     if(response.data.result.length > 0){
                         $scope.accounts = response.data.result; 
                         $scope.selected = response.data.result[0].id;
@@ -187,12 +188,16 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
                         $scope.payment_log = response.data.payment_log;
                     }
                 }else{
-                   window.alert(response.data.message); 
+                   swal("Error!", ""+response.data.message+"", "error")           
                 }         
             }); 
         //}
     }
+    //$scope.page = {};
+    $scope.saveAuditData = function(){
 
+        console.log($scope.accounts);
+    }
 
 });
 

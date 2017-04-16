@@ -44,7 +44,10 @@
   border-width: 2px;
   /*font-weight: bold;*/
 }
-    
+.col-sm-12{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}   
 </style>
 <div class="container" style="width: 100% !important;">
     <div class="row">
@@ -79,7 +82,7 @@
                 </div>                    
            </div>
 
-           <div class="bottom-menu">
+           <div class="bottom-menu" style="bottom: 40px !important;">
                 <span>
                   Cash Sale - {{cash_sale}}
                 </span>
@@ -87,6 +90,10 @@
                  <span>
                   Non Cash Sale - {{non_cash}}
                 </span>
+            </div>
+
+            <div class="bottom-menu">
+                <button data-toggle="modal" data-target="#closingBalModal" class="btn btn-primary" style="margin-left: 23%;">Close Register</button>
             </div>
 
         </div>
@@ -342,6 +349,63 @@
   </div>
 </div>
 
+<div class="modal fade bd-example-modal-sm" id="closingBalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal">Cancel</a>
+        <span style="margin-left: 27%;font-size: 15px;"><b>Close Payments</b></span>
+        <a href="javascript:void(0);" ng-click="saveAuditData()" data-dismiss="modal" class="pull-right">Save</a>
+      </div>
+        <div class="modal-body">
+            <span style="font-weight: bold;">Expected Amounts</span>
+            <div ng-repeat="row in accounts">
+              
+              <div class="col-sm-12">
+                <span class="col-sm-6">{{row.account_name}}</span>
+                <span class="col-sm-6">{{row.balance}}</span>
+              </div>
+              
+
+              <br>
+            </div>
+            <hr>
+            <span style="font-weight: bold;">Actual Amount</span>
+              <div style="height: 175px; overflow-y: auto;">
+
+               
+                    <div ng-repeat="row in accounts">
+
+                          <div class="col-sm-12" style="margin-bottom: 10px;">
+                              <span class="col-sm-4" for="balance">{{row.account_name}} in Register</span>
+                               <input ng-model="row.act_amt" style="width: 58% !important;margin-left: 8%;" class="col-sm-8 list-unstyled num-valid" placeholder="Actual Amount" type="text">
+                          </div> 
+                          <br>
+                          <div class="col-sm-12" style="margin-bottom: 10px;">
+                              <span class="col-sm-4" for="balance">{{row.account_name}} Adjustments</span>
+                               <input ng-model="row.less_amt" style="margin-left: 8%;width: 21%;" class="col-sm-4 num-valid" placeholder="Amount" type="text">
+                               <input ng-model="row.reason" style="margin-left: 4%;" class="col-sm-4 num-valid" placeholder="Reason" type="text">
+                          </div> 
+                          <br>
+                          <div class="col-sm-12" style="margin-bottom: 10px;">
+                              <span class="col-sm-6" style="width: 40% !important;" for="balance">{{row.account_name}} Closing Balance</span>
+                              <!-- <input ng-model="row.closing_amt" ng-init="row.closing_amt = row.balance" style="width: 58% !important;margin-left: 8%;" class="col-sm-8 list-unstyled num-valid" placeholder="Closing Amount" type="text"> -->
+                              <span class="col-sm-6" style="padding-left: 10px !important;">{{row.act_amt}}</span>
+                          </div> 
+                          <hr>
+
+                    </div>
+
+                    
+
+                    
+               
+
+              </div>
+        </div>     
+    </div>
+  </div>
+</div>
 
 
 
