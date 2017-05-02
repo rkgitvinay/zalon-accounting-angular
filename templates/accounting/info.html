@@ -96,7 +96,7 @@
                     </thead>
                     <tbody id="tbody">
 
-                        <tr ng-repeat="log in payment_log | orderBy:'-created_at'" id="tr">
+                        <tr ng-repeat="log in payment_log | orderBy:'-payee'" id="tr">
                             <td ng-if="transaction_type == 'Billing'" style="padding: 4px !important;">
                               <span class="pull-left" style="width: 50px;">
                                 <a ng-click="resendSms(log.payee)" href="javascript:void(0)" style="color: green;font-size: 13px;">Resend SMS</a>

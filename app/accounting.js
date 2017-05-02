@@ -23,8 +23,9 @@ $routeProvider
         });
 });
 var access_token = location.search.split('access_token=')[1];
-var base_url = '52.33.37.151:8080';
-//var base_url = 'localhost:3000';
+//var base_url = '52.33.37.151:8080';
+// var base_url = 'localhost:3000';
+var base_url = 'zalonstyle.in:8080';
 
 
 phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){  
@@ -195,8 +196,27 @@ phpro.controller('HomeCtrl', function($scope,$http,$window,$rootScope){
     }
     //$scope.page = {};
     $scope.saveAuditData = function(){
-
-        console.log($scope.accounts);
+        var log = $scope.accounts;
+        var data = [];
+        var data_log = [];
+        log.forEach(function(row,i){
+            if(row.act_amt != undefined){
+                data_log.push({payment_id:row.id,less_amt:row.balance - row.act_amt,reason:row.reason});
+            }
+            if(log.length == i+1){
+                data.push({access_token:access_token,log:data_log});
+                var pay =  JSON.stringify(data[0]);
+                var url = 'http://'+base_url+'/accounting/saveAuditData'; 
+                $http({
+                    method  : 'POST',
+                    url     : url,
+                    data    : {payload:pay}
+                }).then(function(response){
+                    console.log(response);                                                  
+                }); 
+                
+            }
+        });
     }
 
 });

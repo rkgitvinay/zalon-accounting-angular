@@ -6,7 +6,7 @@
                         <div class="city-selected" style="background-color: #5cc3f0; ">
                           <article>
                             <div class="info">
-                              <div class="city">Collection By Type</div>
+                              <div class="city">Collection By Type (This Month)</div>
                             </div>
                           </article>            
                           <!-- <figure style="background-image: url(http://136.243.1.253/~creolitic/bootsnipp/home.jpg)"></figure> -->
@@ -24,7 +24,7 @@
                             <div class="col-sm-6">
                               <div class="day" style="border-right: medium none navy">
                                 <h1>Product</h1>
-                                <span><i class="fa fa-inr" aria-hidden="true"></i>
+                                <span><i class="fa fa-inr" aria-hid den="true"></i>
 </span><b><span id="product"></span></b>
                               </div>
                             </div>            
@@ -82,21 +82,21 @@
                         </div>
                         <div class="days">
                           <div class="row row-no-gutter" style="margin: 0px;">
-                            <div class="col-sm-6">
-                              <div class="day">
+                            <div class="col-sm-12">
+                              <div class="day"> 
                                 <h1>Membership</h1>
                                 <span><i class="fa fa-inr" aria-hidden="true"></i>
 </span><b><span id="membership">0</span></b>
                               </div>
                             </div>
 
-                            <div class="col-sm-6">
+                           <!--  <div class="col-sm-6">
                               <div class="day" style="border-right: medium none navy">
                                 <h1>Gift Cards</h1>
                                 <span><i class="fa fa-inr" aria-hidden="true"></i>
 </span><b><span id="gift_card">0</span></b>
                               </div>
-                            </div>            
+                            </div>  -->            
 
                           </div>
                         </div>
@@ -161,9 +161,9 @@
 <script>
 var access_token = location.search.split('access_token=')[1];
 
-var local_url = '52.33.37.151:8080';
+// var local_url = '52.33.37.151:8080';
 //var local_url = 'localhost:3000';
-
+var local_url = 'zalonstyle.in:8080';
 
 var url = 'http://'+local_url+'/admin/sales?access_token='+access_token;
 

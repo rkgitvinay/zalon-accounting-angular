@@ -40,7 +40,7 @@
                         <div class="city-selected" style="background-color:  #a64aee ; ">
                           <article>
                             <div class="info">
-                              <div class="city">Customer Visits</div>
+                              <div class="city">Customer Visits (This month)</div>
                             </div>
                           </article>            
                           <figure style="background-image: url(http://zalonstyle.in/angular/images/bbbb.jpg)"></figure>
@@ -72,7 +72,7 @@
                         <div class="city-selected" style="background-color:  #4aeec7 ;">
                           <article>
                             <div class="info">
-                              <div class="city">Top Employee</div>
+                              <div class="city">Top Employee (This month)</div>
                             </div>
                           </article>            
                           <!-- <figure style="background-image: url(http://136.243.1.253/~creolitic/bootsnipp/home.jpg)"></figure> -->
@@ -156,8 +156,9 @@
 
 <script>
 var access_token = location.search.split('access_token=')[1];
-var local_url = '52.33.37.151:8080';
+// var local_url = '52.33.37.151:8080';
 //var local_url = 'localhost:3000';
+var local_url = 'zalonstyle.in:8080';
 
 var url = 'http://'+local_url+'/admin/dashboard?access_token='+access_token;
 
@@ -185,7 +186,7 @@ $.ajax({
       labels: ["Income","Expense"],  
       datasets: [
         {
-          data: [response.pieChart[0].income,0], 
+          data: [response.pieChart[0].income,response.pieChart[1].expense], 
           backgroundColor: ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
           borderColor: ['rgba(255,99,132,1)','rgba(54, 162, 235, 1)'], 
         }
