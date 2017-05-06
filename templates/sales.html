@@ -86,7 +86,7 @@
                               <div class="day"> 
                                 <h1>Membership</h1>
                                 <span><i class="fa fa-inr" aria-hidden="true"></i>
-</span><b><span id="membership">0</span></b>
+</span><b><span id="membership"></span></b>
                               </div>
                             </div>
 
@@ -196,7 +196,7 @@ $.ajax({
         $('#product').text(row.product);
         $('#avg_income').text(row.total);
         $('#projection').text(row.projection);      
-        
+        $('#membership').text(row.membership);
     });
 
     var pieLabel = [];

@@ -114,7 +114,7 @@
 
 
                             <td ng-if="log.description=='pending'">
-                                <a data-toggle="modal" ng-class="{pending:log.description=='pending'}" data-target="#applyPayMethod" ng-click="setInvoiceNum(log.payee)" href="javascript:void(0)">
+                                <a data-toggle="modal" ng-class="{pending:log.description=='pending'}" data-target="#applyPayMethod" ng-click="setInvoiceNum({invoice_original:log.invoice_original,payee:log.payee})" href="javascript:void(0)">
                                   {{log.description}}
                                 </a>
                             </td>

@@ -348,16 +348,23 @@ phpro.controller('InfoCtrl', function($scope,$http,$window,$rootScope) {
         });
 
     }
+    var invoice_original = 0;
     var invoice_number = 0;
     $scope.setInvoiceNum = function(invoice){
-        invoice_number = invoice;
+        invoice_original = invoice.invoice_original;
+        invoice_number = invoice.payee;
     }
 
     $scope.applyPayMethod = function(){
         var method = {
             access_token:access_token,
+            type:'service',
             payment_method:parseInt($scope.payment_id),
-            invoice:invoice_number,
+            invoice_new:invoice_number,
+            invoice:invoice_original,
+            mobile:1234567890,
+            is_partial:0,
+            prepaid_card:'false',
             narration:'billing'
         };
         var url = 'http://'+base_url+'/accounting/applyPaymentMethod';
